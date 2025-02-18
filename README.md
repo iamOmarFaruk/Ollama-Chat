@@ -2,6 +2,8 @@
 
 Welcome to **Ollama Chat**, a cutting-edge chat application built with Next.js, designed to offer a ChatGPT-like interface for seamless interaction with AI models. This application intelligently detects both Ollama and local models, enabling effortless communication.
 
+![Ollama Chat Screenshot](https://github.com/iamOmarFaruk/Ollama-Chat/blob/main/Screenshot%202025-02-18%20at%2011.47.32%E2%80%AFPM.png?raw=true)
+
 ## Features
 
 - **Automatic Model Detection**: Ollama Chat identifies available models automatically, allowing you to select and engage with them easily.
