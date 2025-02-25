@@ -63,11 +63,8 @@ useEffect(() => {
   };
 }, [menuOpen]);
 
-  // doing this for fix hydration mismatch on theme change since it
-  // use local storage
-  if (!mounted) {
-    return null;
-  }
+
+
 
   return (
     <>
