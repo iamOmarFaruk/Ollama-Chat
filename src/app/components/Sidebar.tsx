@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { useChat } from '../providers/ChatProvider';
+import { Loader } from './Loader';
 import {
   SunIcon,
   MoonIcon,
@@ -15,10 +16,22 @@ import {
 } from '@heroicons/react/24/outline';
 
 export const Sidebar = () => {
+   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const { chatHistory,deleteMessage , startNewChat } = useChat();
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+
+// Add this effect to simulate loading
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setIsLoading(false);
+  }, 1000); // Simulate loading for 1 second
+
+  return () => clearTimeout(timer);
+}, []);
+
+
   useEffect(() => {
     setMounted(true);
     // Get saved theme from localStorage or use system as default
@@ -73,55 +86,67 @@ export const Sidebar = () => {
                 <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400">
                   Recent Chats
                 </h2>
-                {chatHistory.length > 0 ? (
-                  chatHistory.map((chat) => (
-                    <div key={chat.id} className="relative group">
-                      {/* Chat Item */}
-                      <div
-                        className="w-full flex items-center justify-between px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-                      >
-                        <div className="flex items-center gap-2">
-                          <ChatBubbleLeftIcon className="w-5 h-5" />
-                          <div className="flex-1 text-left truncate">
-                            <span className="block truncate">{chat.title}</span>
-                            <span className="text-xs text-gray-500">
-                              {new Date(chat.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                        </div>
-                      
-                        {/* Menu Button */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMenuOpen(menuOpen === chat.id ? null : chat.id);
-                          }}
-                          className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
-                        >
-                          <EllipsisVerticalIcon className="w-5 h-5" />
-                        </button>
-                      </div>
-                      
-                      {/* Dropdown Menu (Delete Option) */}
-                      {menuOpen === chat.id && (
-                        <div className="absolute right-0 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 w-28">
-                          <button
-                            onClick={() => {
-                              deleteMessage(chat.id);
-                              setMenuOpen(null);
-                            }}
-                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          >
-                            <TrashIcon className="w-5 h-5" />
-                            <span>Delete</span>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))
+
+                {/* Chat History List start */}
+                {isLoading ? (
+                  <Loader />
                 ) : (
-                  <p className="text-sm text-gray-500 italic">No chat history yet</p>
+                  <>
+                    {chatHistory && chatHistory.length > 0 ? (
+                      [...chatHistory].reverse().map((chat) => (
+                        <div key={chat.id} className="relative group">
+                          {/* Chat Item */}
+                          <div
+                            className="w-full flex items-center justify-between px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                          >
+                            <div className="flex items-center gap-2">
+                              <ChatBubbleLeftIcon className="w-5 h-5" />
+                              <div className="flex-1 text-left truncate">
+                                <span className="block truncate">{chat.title}</span>
+                                <span className="text-xs text-gray-500">
+                                  {new Date(chat.createdAt).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </div>
+                          
+                            {/* Menu Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMenuOpen(menuOpen === chat.id ? null : chat.id);
+                              }}
+                              className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+                            >
+                              <EllipsisVerticalIcon className="w-5 h-5" />
+                            </button>
+                          </div>
+                          
+                          {/* Dropdown Menu (Delete Option) */}
+                          {menuOpen === chat.id && (
+                            <div className="absolute right-0 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 w-28">
+                              <button
+                                onClick={() => {
+                                  deleteMessage(chat.id);
+                                  setMenuOpen(null);
+                                }}
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+                              >
+                                <TrashIcon className="w-5 h-5" />
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500 italic">No chat history yet</p>
+                    )}
+                  </>
                 )}
+                {/* Chat History List end */}
+
+
+
               </div>
             </div>
           </nav>
