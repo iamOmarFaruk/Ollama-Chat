@@ -4,7 +4,7 @@ import React from "react";
 
 export const ChatLoader = () => {
   // Generate random number of skeletons between 4-7
-  const skeletonCount = Math.floor(Math.random() * 4) + 4;
+  const skeletonCount = Math.floor(Math.random() * 3) + 2;
   
   return (
     <div className="flex flex-col space-y-4 overflow-hidden">

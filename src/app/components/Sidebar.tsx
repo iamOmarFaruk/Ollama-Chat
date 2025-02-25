@@ -26,7 +26,7 @@ export const Sidebar = () => {
 useEffect(() => {
   const timer = setTimeout(() => {
     setIsLoading(false);
-  }, 1000); // Simulate loading for 1 second
+  },300); // Simulate loading for 1 second
 
   return () => clearTimeout(timer);
 }, []);
@@ -112,20 +112,25 @@ useEffect(() => {
                     {chatHistory && chatHistory.length > 0 ? (
                       [...chatHistory].reverse().map((chat) => (
                         <div key={chat.id} className="relative group chat-menu-container">
-                        {/* Chat Item */}
-                        <div className="w-full flex items-center justify-between px-3 py-3 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
-                          <div className="flex items-center gap-3">
-                            {/* Chat Icon */}
-                            <ChatBubbleLeftIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
-                            <div className="flex-1 text-left truncate">
-                              <span className="block font-medium text-gray-900 dark:text-gray-100 truncate">
-                                {chat.title}
-                              </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {new Date(chat.createdAt).toLocaleDateString()}
-                              </span>
+                          {/* Chat Item */}
+                          <div 
+                            onClick={() => {
+                              alert(`Title: ${chat.title}\nID: ${chat.id}\nTime: ${new Date(chat.createdAt).toLocaleString()}`);
+                            }}
+                            className="w-full flex items-center justify-between px-3 py-3 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
+                          >
+                            <div className="flex items-center gap-3">
+                              {/* Chat Icon */}
+                              <ChatBubbleLeftIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                              <div className="flex-1 text-left truncate">
+                                <span className="block font-medium text-gray-900 dark:text-gray-100 truncate">
+                                  {chat.title}
+                                </span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {new Date(chat.createdAt).toLocaleDateString()}
+                                </span>
+                              </div>
                             </div>
-                          </div>
         
                           {/* ৩-ডট মেনু */}
                           <button
@@ -154,7 +159,7 @@ useEffect(() => {
                             </button>
                           </div>
                         )}
-                      </div>
+                        </div>
                       ))
                     ) : (
                       <p className="text-sm text-gray-500 italic">No chat history yet</p>
