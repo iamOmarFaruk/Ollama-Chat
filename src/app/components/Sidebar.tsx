@@ -46,6 +46,23 @@ useEffect(() => {
     }
   }, [theme]);
 
+
+
+
+  // Add this near your other useEffect hooks
+useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuOpen && !(event.target as Element).closest('.chat-menu-container')) {
+      setMenuOpen(null);
+    }
+  };
+
+  document.addEventListener('click', handleClickOutside);
+  return () => {
+    document.removeEventListener('click', handleClickOutside);
+  };
+}, [menuOpen]);
+
   // doing this for fix hydration mismatch on theme change since it
   // use local storage
   if (!mounted) {
@@ -58,7 +75,7 @@ useEffect(() => {
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out z-40 
-          w-64
+          w-80
           lg:relative lg:block border-r border-gray-200 dark:border-gray-700`}
       >
         <div className="flex flex-col h-full">
@@ -94,49 +111,50 @@ useEffect(() => {
                   <>
                     {chatHistory && chatHistory.length > 0 ? (
                       [...chatHistory].reverse().map((chat) => (
-                        <div key={chat.id} className="relative group">
-                          {/* Chat Item */}
-                          <div
-                            className="w-full flex items-center justify-between px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-                          >
-                            <div className="flex items-center gap-2">
-                              <ChatBubbleLeftIcon className="w-5 h-5" />
-                              <div className="flex-1 text-left truncate">
-                                <span className="block truncate">{chat.title}</span>
-                                <span className="text-xs text-gray-500">
-                                  {new Date(chat.createdAt).toLocaleDateString()}
-                                </span>
-                              </div>
+                        <div key={chat.id} className="relative group chat-menu-container">
+                        {/* Chat Item */}
+                        <div className="w-full flex items-center justify-between px-3 py-3 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
+                          <div className="flex items-center gap-3">
+                            {/* Chat Icon */}
+                            <ChatBubbleLeftIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                            <div className="flex-1 text-left truncate">
+                              <span className="block font-medium text-gray-900 dark:text-gray-100 truncate">
+                                {chat.title}
+                              </span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {new Date(chat.createdAt).toLocaleDateString()}
+                              </span>
                             </div>
-                          
-                            {/* Menu Button */}
+                          </div>
+        
+                          {/* ৩-ডট মেনু */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMenuOpen(menuOpen === chat.id ? null : chat.id);
+                            }}
+                            className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+                          >
+                            <EllipsisVerticalIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                          </button>
+                        </div>
+        
+                        {/* Dropdown Menu (Delete Option) */}
+                        {menuOpen === chat.id && (
+                          <div className="absolute right-2 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 w-32 border border-gray-200 dark:border-gray-700">
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setMenuOpen(menuOpen === chat.id ? null : chat.id);
+                              onClick={() => {
+                                deleteMessage(chat.id);
+                                setMenuOpen(null);
                               }}
-                              className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+                              className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                             >
-                              <EllipsisVerticalIcon className="w-5 h-5" />
+                              <TrashIcon className="w-5 h-5" />
+                              <span>Delete</span>
                             </button>
                           </div>
-                          
-                          {/* Dropdown Menu (Delete Option) */}
-                          {menuOpen === chat.id && (
-                            <div className="absolute right-0 top-10 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 w-28">
-                              <button
-                                onClick={() => {
-                                  deleteMessage(chat.id);
-                                  setMenuOpen(null);
-                                }}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
-                              >
-                                <TrashIcon className="w-5 h-5" />
-                                <span>Delete</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                        )}
+                      </div>
                       ))
                     ) : (
                       <p className="text-sm text-gray-500 italic">No chat history yet</p>
