@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { useChat } from '../providers/ChatProvider';
 import {
-  Bars3Icon,
-  XMarkIcon,
   SunIcon,
   MoonIcon,
   ComputerDesktopIcon,
@@ -16,7 +14,6 @@ import {
 
 export const Sidebar = () => {
   const [mounted, setMounted] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
   const { theme, setTheme } = useTheme();
   const { chatHistory, startNewChat } = useChat();
   
@@ -38,32 +35,19 @@ export const Sidebar = () => {
     return null;
   }
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
-
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 lg:hidden"
-      >
-        {isOpen ? (
-          <XMarkIcon className="w-6 h-6" />
-        ) : (
-          <Bars3Icon className="w-6 h-6" />
-        )}
-      </button>
-
+     
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out z-40 
-          ${isOpen ? "w-64" : "w-0 -translate-x-full lg:translate-x-0 lg:w-20"}
+          w-64
           lg:relative lg:block border-r border-gray-200 dark:border-gray-700`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className={`text-xl font-semibold ${!isOpen && "lg:hidden"}`}>
+            <h1 className="text-xl font-semibold">
               Ollama Chat
             </h1>
           </div>
@@ -77,12 +61,12 @@ export const Sidebar = () => {
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-100"
               >
                 <ChatBubbleLeftIcon className="w-5 h-5" />
-                {isOpen && <span>New Chat</span>}
+                <span>New Chat</span>
               </button>
 
               {/* Chat History */}
               <div className="space-y-2">
-                <h2 className={`text-sm font-semibold text-gray-500 dark:text-gray-400 ${!isOpen && "lg:hidden"}`}>
+                <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400">
                   Recent Chats
                 </h2>
                 {chatHistory.length > 0 ? (
@@ -92,18 +76,16 @@ export const Sidebar = () => {
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <ChatBubbleLeftIcon className="w-5 h-5" />
-                      {isOpen && (
-                        <div className="flex-1 text-left truncate">
-                          <span className="block truncate">{chat.title}</span>
-                          <span className="text-xs text-gray-500">
-                            {new Date(chat.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      )}
+                      <div className="flex-1 text-left truncate">
+                        <span className="block truncate">{chat.title}</span>
+                        <span className="text-xs text-gray-500">
+                          {new Date(chat.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
                     </button>
                   ))
                 ) : (
-                  <p className={`text-sm text-gray-500 italic ${!isOpen && "lg:hidden"}`}>
+                  <p className="text-sm text-gray-500 italic">
                     No chat history yet
                   </p>
                 )}
@@ -115,8 +97,8 @@ export const Sidebar = () => {
           <div className="border-t border-gray-200 dark:border-gray-700 p-4">
             <div className="space-y-4">
               {/* Theme Selector */}
-              <div className={`flex ${isOpen ? 'justify-between' : 'justify-center'} items-center`}>
-                {isOpen && <span className="text-sm">Theme</span>}
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Theme</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setTheme('light')}
@@ -146,11 +128,11 @@ export const Sidebar = () => {
               <div className="space-y-2">
                 <button className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
                   <Cog6ToothIcon className="w-5 h-5" />
-                  {isOpen && <span>Settings</span>}
+                  <span>Settings</span>
                 </button>
                 <button className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
                   <ArrowRightStartOnRectangleIcon className="w-5 h-5" />
-                  {isOpen && <span>Logout</span>}
+                  <span>Logout</span>
                 </button>
               </div>
             </div>
