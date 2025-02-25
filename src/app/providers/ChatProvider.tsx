@@ -30,6 +30,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
 
+
+  // display chat history 
   const fetchMessages = async () => {
     try {
       const response = await fetch("/api/messages");
@@ -55,6 +57,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+
+  // send message - add new chat to database
   const sendMessage = async (content: string) => {
     // Define the temporary message outside the try block
     const tempMessage: Message = {
@@ -93,6 +97,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // delete message from database
   const deleteMessage = async (id: string) => {
     try {
       await fetch(`/api/messages?id=${id}`, { method: "DELETE" });
@@ -103,6 +108,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // start new chat
   const startNewChat = () => {
     setMessages([]); // Clear messages to start fresh
   };
