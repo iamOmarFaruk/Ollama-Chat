@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Chat model to store chat sessions
+model Chat {
+  id        String    @id @default(cuid())
+  title     String    @default("New Chat")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  modelId   String
+  model     Model     @relation(fields: [modelId], references: [id])
+}
+
+// Message model to store individual messages in a chat
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  role      String   // 'user' or 'assistant'
+  createdAt DateTime @default(now())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
+// Model to store available AI models
+model Model {
+  id       String @id @default(cuid())
+  name     String @unique
+  chats    Chat[]
+  isActive Boolean @default(true)
+}
