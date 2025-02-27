@@ -65,8 +65,8 @@ export default function ChatInput({ chatId }) {
   const availableModels = ollamaStatus.models.filter(model => model.isActive) || [];
   
   return (
-    <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="chat-input border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+      <div className="w-full max-w-6xl mx-auto px-4 chat-input-container">
         <div className="flex items-center justify-between mb-2">
           <div className="text-sm text-gray-500 dark:text-gray-400">
             {currentModel ? (
