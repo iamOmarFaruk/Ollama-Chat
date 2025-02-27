@@ -8,6 +8,7 @@ const AppContext = createContext();
 
 // Context provider
 export function AppProvider({ children }) {
+  const [appLoading, setAppLoading] = useState(true);
   const [ollamaStatus, setOllamaStatus] = useState({
     running: false,
     checking: true,
@@ -31,8 +32,23 @@ export function AppProvider({ children }) {
   
   // Check Ollama status on mount
   useEffect(() => {
-    checkOllamaStatus();
-    fetchChats();
+    const initializeApp = async () => {
+      try {
+        await Promise.all([
+          checkOllamaStatus(),
+          fetchChats()
+        ]);
+      } catch (error) {
+        console.error('Error initializing app:', error);
+      } finally {
+        // Set a small delay to ensure everything is loaded
+        setTimeout(() => {
+          setAppLoading(false);
+        }, 500);
+      }
+    };
+    
+    initializeApp();
   }, []);
   
   // Check Ollama status
@@ -212,6 +228,7 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+        appLoading,
         ollamaStatus,
         chats,
         currentChat,
