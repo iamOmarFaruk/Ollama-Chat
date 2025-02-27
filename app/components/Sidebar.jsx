@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useApp } from '@/app/lib/context';
 import { FaPlus, FaTrash, FaComment, FaMoon, FaSun, FaCog, FaSignOutAlt, FaRobot } from 'react-icons/fa';
 import ConfirmationModal from '@/app/components/ConfirmationModal';
+import Toast from '@/app/components/Toast';
 import axios from 'axios';
 
 export default function Sidebar() {
@@ -17,6 +18,7 @@ export default function Sidebar() {
   const [deletingChatId, setDeletingChatId] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [chatToDelete, setChatToDelete] = useState(null);
+  const [toast, setToast] = useState({ message: '', type: 'success' });
   
   const handleNewChat = async () => {
     try {
@@ -53,18 +55,34 @@ export default function Sidebar() {
       // Refresh the chats list
       await fetchChats();
       
+      // Show success toast
+      setToast({
+        message: 'Chat deleted successfully',
+        type: 'success'
+      });
+      
       // If we're on the deleted chat's page, redirect to home
       if (pathname === `/chat/${chatToDelete.id}`) {
         router.push('/');
       }
     } catch (error) {
       console.error('Error deleting chat:', error);
+      // Show error toast
+      setToast({
+        message: 'Failed to delete chat',
+        type: 'error'
+      });
     } finally {
       setIsDeleting(false);
       setDeletingChatId(null);
       setChatToDelete(null);
       setShowConfirmModal(false);
     }
+  };
+  
+  // Clear toast message
+  const clearToast = () => {
+    setToast({ message: '', type: 'success' });
   };
   
   // Check if a chat is currently selected
@@ -74,6 +92,13 @@ export default function Sidebar() {
   
   return (
     <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+      {/* Toast Notification */}
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        onClose={clearToast} 
+      />
+      
       {/* Logo and App Title */}
       <Link href="/" className="block p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-center mb-1">
