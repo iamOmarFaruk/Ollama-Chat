@@ -90,6 +90,16 @@ export default function Sidebar() {
     return pathname === `/chat/${chatId}`;
   };
   
+  // Handle theme toggle with toast notification
+  const handleThemeToggle = () => {
+    toggleTheme();
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setToast({
+      message: `${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} mode selected`,
+      type: 'info'
+    });
+  };
+  
   return (
     <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
       {/* Toast Notification */}
@@ -183,7 +193,7 @@ export default function Sidebar() {
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-4">
           <button
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
             className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
           >
             {theme === 'dark' ? (

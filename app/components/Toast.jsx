@@ -3,8 +3,12 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheckCircle, FaExclamationCircle, FaInfoCircle } from 'react-icons/fa';
+import { useApp } from '@/app/lib/context';
 
 export default function Toast({ message, type = 'success', onClose, duration = 1000 }) {
+  const { theme } = useApp();
+  const isDarkMode = theme === 'dark';
+  
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -44,7 +48,11 @@ export default function Toast({ message, type = 'success', onClose, duration = 1
               damping: 25,
               delay: 0.3 // 300ms delay before showing
             }}
-            className="flex items-center p-3 px-4 rounded-lg shadow-lg bg-gray-800/90 backdrop-blur-sm border border-gray-700 text-white"
+            className={`flex items-center p-3 px-4 rounded-lg shadow-lg border ${
+              isDarkMode 
+                ? 'bg-gray-800/90 backdrop-blur-sm border-gray-700 text-white' 
+                : 'bg-white/90 backdrop-blur-sm border-gray-200 text-gray-800'
+            }`}
           >
             <div className="mr-3">
               {getIcon()}
