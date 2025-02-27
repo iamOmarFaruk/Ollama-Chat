@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useApp } from '@/app/lib/context';
-import { FaPlus, FaTrash, FaComment, FaMoon, FaSun, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaComment, FaMoon, FaSun, FaCog, FaSignOutAlt, FaRobot } from 'react-icons/fa';
 import ConfirmationModal from '@/app/components/ConfirmationModal';
 import axios from 'axios';
 
@@ -74,6 +74,15 @@ export default function Sidebar() {
   
   return (
     <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+      {/* Logo and App Title */}
+      <Link href="/" className="block p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-center mb-1">
+          <FaRobot className="text-blue-600 mr-2" size={24} />
+          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Ollama Chat</h1>
+        </div>
+        <p className="text-xs text-center text-gray-500 dark:text-gray-400">v2 by Omar</p>
+      </Link>
+      
       <div className="p-4">
         <button
           onClick={handleNewChat}
