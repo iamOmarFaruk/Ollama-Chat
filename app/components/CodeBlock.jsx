@@ -22,7 +22,7 @@ export default function CodeBlock({ code, language }) {
   };
   
   return (
-    <div className="relative my-4 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
+    <div className="relative my-4 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 w-full">
       <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <span className="text-xs font-mono text-gray-500 dark:text-gray-400">
           {language || 'javascript'}
@@ -40,20 +40,24 @@ export default function CodeBlock({ code, language }) {
         </button>
       </div>
       
-      <SyntaxHighlighter
-        language={lang}
-        style={isDarkMode ? vscDarkPlus : vs}
-        customStyle={{
-          margin: 0,
-          padding: '1rem',
-          fontSize: '0.9rem',
-          lineHeight: 1.5,
-        }}
-        wrapLines={true}
-        showLineNumbers={true}
-      >
-        {code}
-      </SyntaxHighlighter>
+      <div className="overflow-x-auto w-full">
+        <SyntaxHighlighter
+          language={lang}
+          style={isDarkMode ? vscDarkPlus : vs}
+          customStyle={{
+            margin: 0,
+            padding: '1rem',
+            fontSize: '0.9rem',
+            lineHeight: 1.5,
+            width: '100%',
+          }}
+          wrapLines={true}
+          showLineNumbers={true}
+          wrapLongLines={false}
+        >
+          {code}
+        </SyntaxHighlighter>
+      </div>
     </div>
   );
 } 

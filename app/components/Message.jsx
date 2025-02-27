@@ -4,9 +4,16 @@ import { useEffect, useRef } from 'react';
 import { FaUser, FaRobot } from 'react-icons/fa';
 import CodeBlock from './CodeBlock';
 import { parseMessageContent } from '@/app/lib/utils';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
+import { useApp } from '@/app/lib/context';
 
 export default function Message({ message }) {
   const messageRef = useRef(null);
+  const { theme } = useApp();
+  const isDarkMode = theme === 'dark';
   
   // Scroll to new messages
   useEffect(() => {
@@ -18,12 +25,39 @@ export default function Message({ message }) {
   const isUser = message.role === 'user';
   const messageParts = parseMessageContent(message.content);
   
+  // Custom renderer for code blocks within markdown
+  const components = {
+    code({ node, inline, className, children, ...props }) {
+      const match = /language-(\w+)/.exec(className || '');
+      const language = match ? match[1] : '';
+      
+      if (!inline && language) {
+        return (
+          <CodeBlock 
+            key={Math.random()}
+            code={String(children).replace(/\n$/, '')} 
+            language={language} 
+          />
+        );
+      }
+      
+      return (
+        <code 
+          className={`${className || ''} px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-sm`} 
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+  };
+  
   return (
     <div 
       ref={messageRef}
       className={`py-6 ${isUser ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'}`}
     >
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-5xl mx-auto px-4 w-full">
         <div className="flex items-start space-x-4">
           <div className={`flex-shrink-0 rounded-full p-2 ${
             isUser 
@@ -33,7 +67,7 @@ export default function Message({ message }) {
             {isUser ? <FaUser size={16} /> : <FaRobot size={16} />}
           </div>
           
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-2 overflow-hidden">
             <div className="font-medium">
               {isUser ? 'You' : 'Assistant'}
             </div>
@@ -49,11 +83,17 @@ export default function Message({ message }) {
                     />
                   );
                 } else {
-                  return part.content.split('\n').map((line, i) => (
-                    <p key={`${index}-${i}`} className={line.trim() === '' ? 'h-4' : ''}>
-                      {line}
-                    </p>
-                  ));
+                  return (
+                    <div key={index} className="markdown-content">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                        components={components}
+                      >
+                        {part.content}
+                      </ReactMarkdown>
+                    </div>
+                  );
                 }
               })}
             </div>

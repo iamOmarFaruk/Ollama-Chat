@@ -112,14 +112,14 @@ export default function ChatPage() {
   
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <div className="w-64 h-full">
+      <div className="w-64 h-full flex-shrink-0">
         <Sidebar />
       </div>
       
-      <div className="flex-1 flex flex-col h-full">
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
         <ChatHeader chat={currentChat} />
         
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center text-gray-500 dark:text-gray-400 max-w-md px-4">
@@ -138,7 +138,7 @@ export default function ChatPage() {
               </div>
             </div>
           ) : (
-            <div>
+            <div className="w-full">
               {messages.map((message) => (
                 <Message key={message.id} message={message} />
               ))}
