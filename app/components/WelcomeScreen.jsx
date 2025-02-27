@@ -55,7 +55,7 @@ export default function WelcomeScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-bold mb-4 text-center">Welcome to Ollama Chat</h1>
+        <h1 className="text-4xl font-bold mb-4 text-center">Welcome to Ochat</h1>
         <p className="text-lg text-center text-gray-600 dark:text-gray-400 mb-8">
           Get started by selecting a task or type a message below to begin chatting.
         </p>

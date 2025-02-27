@@ -78,7 +78,7 @@ export default function Sidebar() {
       <Link href="/" className="block p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-center mb-1">
           <FaRobot className="text-blue-600 mr-2" size={24} />
-          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Ollama Chat</h1>
+          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Ochat</h1>
         </div>
         <p className="text-xs text-center text-gray-500 dark:text-gray-400">v2 by Omar</p>
       </Link>

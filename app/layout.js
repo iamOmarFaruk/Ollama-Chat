@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Ollama Chat",
-  description: "Chat with your local Ollama models",
+  title: "Ochat | Chat and ask whatever you want",
+  description: "A modern chat interface for Ollama models",
 };
 
 export default function RootLayout({ children }) {
