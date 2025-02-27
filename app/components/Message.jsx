@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import { FaUser, FaRobot } from 'react-icons/fa';
+import CodeBlock from './CodeBlock';
+import { parseMessageContent } from '@/app/lib/utils';
 
 export default function Message({ message }) {
   const messageRef = useRef(null);
@@ -14,6 +16,7 @@ export default function Message({ message }) {
   }, []);
   
   const isUser = message.role === 'user';
+  const messageParts = parseMessageContent(message.content);
   
   return (
     <div 
@@ -36,11 +39,23 @@ export default function Message({ message }) {
             </div>
             
             <div className="prose dark:prose-invert max-w-none">
-              {message.content.split('\n').map((line, i) => (
-                <p key={i} className={line.trim() === '' ? 'h-4' : ''}>
-                  {line}
-                </p>
-              ))}
+              {messageParts.map((part, index) => {
+                if (part.type === 'code') {
+                  return (
+                    <CodeBlock 
+                      key={index} 
+                      code={part.content} 
+                      language={part.language} 
+                    />
+                  );
+                } else {
+                  return part.content.split('\n').map((line, i) => (
+                    <p key={`${index}-${i}`} className={line.trim() === '' ? 'h-4' : ''}>
+                      {line}
+                    </p>
+                  ));
+                }
+              })}
             </div>
           </div>
         </div>
