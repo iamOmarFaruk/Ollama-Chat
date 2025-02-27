@@ -18,6 +18,17 @@ export function AppProvider({ children }) {
   const [currentModel, setCurrentModel] = useState(null);
   const [theme, setTheme] = useState('dark');
   
+  // Initialize theme from localStorage on mount
+  useEffect(() => {
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('ochat-theme');
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
+    }
+  }, []);
+  
   // Check Ollama status on mount
   useEffect(() => {
     checkOllamaStatus();
@@ -170,7 +181,13 @@ export function AppProvider({ children }) {
   
   // Toggle theme
   const toggleTheme = () => {
-    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ochat-theme', newTheme);
+    }
   };
   
   // Pull a model
