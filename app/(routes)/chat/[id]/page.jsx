@@ -14,9 +14,11 @@ export default function ChatPage() {
   const searchParams = useSearchParams();
   const chatId = params.id;
   const task = searchParams.get('task');
+  const firstMessage = searchParams.get('firstMessage');
   const { currentChat, setCurrentChat, theme, sendMessage, currentModel } = useApp();
   const messagesEndRef = useRef(null);
   const [isProcessingTask, setIsProcessingTask] = useState(false);
+  const [isProcessingFirstMessage, setIsProcessingFirstMessage] = useState(false);
   
   // Fetch chat data
   useEffect(() => {
@@ -56,6 +58,25 @@ export default function ChatPage() {
     processTask();
   }, [task, currentChat, chatId, sendMessage, currentModel, isProcessingTask]);
   
+  // Handle firstMessage parameter
+  useEffect(() => {
+    const processFirstMessage = async () => {
+      if (firstMessage && currentChat && currentModel && !isProcessingFirstMessage && 
+          (!currentChat.messages || currentChat.messages.length === 0)) {
+        try {
+          setIsProcessingFirstMessage(true);
+          await sendMessage(firstMessage, chatId, currentModel.id);
+        } catch (error) {
+          console.error('Error processing first message:', error);
+        } finally {
+          setIsProcessingFirstMessage(false);
+        }
+      }
+    };
+    
+    processFirstMessage();
+  }, [firstMessage, currentChat, chatId, sendMessage, currentModel, isProcessingFirstMessage]);
+  
   // Scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -87,6 +108,7 @@ export default function ChatPage() {
   
   // Ensure messages array exists
   const messages = currentChat.messages || [];
+  const isProcessing = isProcessingTask || isProcessingFirstMessage;
   
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -103,14 +125,14 @@ export default function ChatPage() {
               <div className="text-center text-gray-500 dark:text-gray-400 max-w-md px-4">
                 <h2 className="text-xl font-medium mb-2">Start a conversation</h2>
                 <p>Send a message to start chatting with the AI assistant.</p>
-                {isProcessingTask && (
+                {isProcessing && (
                   <div className="mt-4">
                     <div className="animate-pulse flex space-x-2 justify-center">
                       <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
                       <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
                       <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
                     </div>
-                    <p className="mt-2 text-sm text-blue-500">Processing your task...</p>
+                    <p className="mt-2 text-sm text-blue-500">Processing your message...</p>
                   </div>
                 )}
               </div>

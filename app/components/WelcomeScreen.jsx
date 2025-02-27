@@ -9,19 +9,6 @@ export default function WelcomeScreen() {
   const router = useRouter();
   const { createChat, currentModel, ollamaStatus } = useApp();
   
-  const handleStartChat = async () => {
-    if (!currentModel) return;
-    
-    try {
-      const chat = await createChat(currentModel.id);
-      if (chat && chat.id) {
-        router.push(`/chat/${chat.id}`);
-      }
-    } catch (error) {
-      console.error('Error creating chat:', error);
-    }
-  };
-  
   const handleTaskClick = async (task) => {
     if (!currentModel) return;
     
@@ -62,16 +49,15 @@ export default function WelcomeScreen() {
   };
   
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4">
+    <div className="w-full">
       <motion.div 
-        className="w-full max-w-2xl"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-4xl font-bold mb-4 text-center">Welcome to Ollama Chat</h1>
-        <p className="text-lg text-center text-gray-600 dark:text-gray-400 mb-12">
-          Get started by selecting a task and Chat can do the rest. Not sure where to start?
+        <p className="text-lg text-center text-gray-600 dark:text-gray-400 mb-8">
+          Get started by selecting a task or type a message below to begin chatting.
         </p>
         
         <motion.div 
@@ -102,36 +88,6 @@ export default function WelcomeScreen() {
             </motion.button>
           ))}
         </motion.div>
-        
-        <motion.div 
-          className="flex justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <motion.button
-            onClick={handleStartChat}
-            disabled={isDisabled}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Start New Chat
-          </motion.button>
-        </motion.div>
-        
-        {isDisabled && (
-          <motion.p 
-            className="text-center text-yellow-600 dark:text-yellow-400 mt-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {!ollamaStatus.running 
-              ? "Ollama is not running. Please start Ollama to begin chatting." 
-              : "No model selected. Please select a model in the settings."}
-          </motion.p>
-        )}
       </motion.div>
     </div>
   );
