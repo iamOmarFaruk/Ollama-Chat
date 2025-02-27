@@ -4,10 +4,18 @@ import { useRouter } from 'next/navigation';
 import { useApp } from '@/app/lib/context';
 import { FaFileAlt, FaCode, FaFileSignature, FaRobot, FaArrowRight } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { ReactTyped } from 'react-typed';
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const { createChat, currentModel, ollamaStatus } = useApp();
+  
+  const sentences = [
+    "Ask me anything about code, data, or general knowledge.",
+    "I can help you write blog posts, essays, or creative content.",
+    "Need help with programming? I can assist with various languages.",
+    "Let's collaborate on your next project together."
+  ];
   
   const handleTaskClick = async (task) => {
     if (!currentModel) return;
@@ -56,9 +64,21 @@ export default function WelcomeScreen() {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-4xl font-bold mb-4 text-center">Welcome to Ochat</h1>
-        <p className="text-lg text-center text-gray-600 dark:text-gray-400 mb-8">
-          Get started by selecting a task or type a message below to begin chatting.
-        </p>
+        
+        <div className="h-20 flex items-center justify-center mb-8">
+          <div className="text-lg text-center text-gray-600 dark:text-gray-400 min-h-[2rem]">
+            <ReactTyped
+              strings={sentences}
+              typeSpeed={40}
+              backSpeed={30}
+              backDelay={2000}
+              loop
+              smartBackspace
+              cursorChar="|"
+              className="typed-text"
+            />
+          </div>
+        </div>
         
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
