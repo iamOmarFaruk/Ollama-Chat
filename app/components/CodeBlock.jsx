@@ -40,7 +40,7 @@ export default function CodeBlock({ code, language }) {
         </button>
       </div>
       
-      <div className="overflow-x-auto w-full">
+      <div className="overflow-x-auto w-full" style={{ maxWidth: '100%' }}>
         <SyntaxHighlighter
           language={lang}
           style={isDarkMode ? vscDarkPlus : vs}
@@ -50,10 +50,20 @@ export default function CodeBlock({ code, language }) {
             fontSize: '0.9rem',
             lineHeight: 1.5,
             width: '100%',
+            maxWidth: '100%',
+            overflowX: 'auto',
           }}
           wrapLines={true}
           showLineNumbers={true}
-          wrapLongLines={false}
+          wrapLongLines={true}
+          codeTagProps={{
+            style: {
+              fontSize: '0.9rem',
+              fontFamily: 'var(--font-geist-mono), Menlo, Monaco, Consolas, monospace',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
+            }
+          }}
         >
           {code}
         </SyntaxHighlighter>

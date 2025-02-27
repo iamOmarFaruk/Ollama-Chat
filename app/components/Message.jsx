@@ -55,10 +55,10 @@ export default function Message({ message }) {
   return (
     <div 
       ref={messageRef}
-      className={`py-6 ${isUser ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'}`}
+      className={`py-6 w-full ${isUser ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'}`}
     >
-      <div className="max-w-5xl mx-auto px-4 w-full">
-        <div className="flex items-start space-x-4">
+      <div className="w-full max-w-6xl mx-auto px-4">
+        <div className="flex items-start space-x-4 w-full">
           <div className={`flex-shrink-0 rounded-full p-2 ${
             isUser 
               ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' 
@@ -67,12 +67,12 @@ export default function Message({ message }) {
             {isUser ? <FaUser size={16} /> : <FaRobot size={16} />}
           </div>
           
-          <div className="flex-1 space-y-2 overflow-hidden">
+          <div className="flex-1 space-y-2 overflow-hidden w-full">
             <div className="font-medium">
               {isUser ? 'You' : 'Assistant'}
             </div>
             
-            <div className="prose dark:prose-invert max-w-none">
+            <div className="prose dark:prose-invert max-w-none w-full">
               {messageParts.map((part, index) => {
                 if (part.type === 'code') {
                   return (
@@ -84,7 +84,7 @@ export default function Message({ message }) {
                   );
                 } else {
                   return (
-                    <div key={index} className="markdown-content">
+                    <div key={index} className="markdown-content w-full">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw, rehypeSanitize]}

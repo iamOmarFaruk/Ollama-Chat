@@ -61,6 +61,8 @@ pre {
   padding: 1rem;
   overflow-x: auto;
   margin: 1rem 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .dark pre {
@@ -70,11 +72,14 @@ pre {
 code {
   font-family: var(--font-geist-mono);
   font-size: 0.9em;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 /* Prose styling for markdown content */
 .prose {
-  max-width: 65ch;
+  max-width: 100%;
+  width: 100%;
   color: inherit;
 }
 
@@ -232,6 +237,8 @@ code {
 
 .markdown-content code:not([class*="language-"]) {
   @apply px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-sm;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .markdown-content pre {
